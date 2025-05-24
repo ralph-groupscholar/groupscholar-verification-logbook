@@ -3,14 +3,7 @@ String formatListRows(List<Map<String, dynamic>> rows) {
     return 'No verification checks found for the selected filters.';
   }
 
-  final headers = [
-    'Date',
-    'Scholar',
-    'Scholar ID',
-    'Type',
-    'Status',
-    'By',
-  ];
+  final headers = ['Date', 'Scholar', 'Scholar ID', 'Type', 'Status', 'By'];
   final widths = List<int>.filled(headers.length, 0);
 
   void consider(int index, String value) {
@@ -79,7 +72,9 @@ String formatSummaryTable(String title, Map<String, int> counts) {
 
   final buffer = StringBuffer();
   buffer.writeln(title);
-  buffer.writeln(_row(headers, [labelWidth, countWidth], (v, w) => v.padRight(w)));
+  buffer.writeln(
+    _row(headers, [labelWidth, countWidth], (v, w) => v.padRight(w)),
+  );
   buffer.writeln(
     _row(
       ['-' * labelWidth, '-' * countWidth],
@@ -101,7 +96,11 @@ String formatSummaryTable(String title, Map<String, int> counts) {
   return buffer.toString().trimRight();
 }
 
-String _row(List<String> values, List<int> widths, String Function(String, int) pad) {
+String _row(
+  List<String> values,
+  List<int> widths,
+  String Function(String, int) pad,
+) {
   final padded = <String>[];
   for (var i = 0; i < values.length; i++) {
     padded.add(pad(values[i], widths[i]));

@@ -43,12 +43,12 @@ class DatabaseConfig {
   }
 
   Endpoint toEndpoint() => Endpoint(
-        host: host,
-        port: port,
-        database: database,
-        username: username,
-        password: password,
-      );
+    host: host,
+    port: port,
+    database: database,
+    username: username,
+    password: password,
+  );
 
   ConnectionSettings toSettings() => ConnectionSettings(sslMode: sslMode);
 

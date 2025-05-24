@@ -86,7 +86,9 @@ void _printUsage(ArgParser parser) {
   stdout.writeln('Groupscholar Verification Logbook');
   stdout.writeln('');
   stdout.writeln('Usage:');
-  stdout.writeln('  dart run bin/groupscholar_verification_logbook.dart <command> [options]');
+  stdout.writeln(
+    '  dart run bin/groupscholar_verification_logbook.dart <command> [options]',
+  );
   stdout.writeln('');
   stdout.writeln('Commands:');
   stdout.writeln('  add       Add a verification check record');
@@ -102,11 +104,14 @@ Future<void> _handleAdd(Connection conn, ArgResults cmd) async {
   final status = cmd['status'] as String?;
 
   if (scholar == null || type == null || status == null) {
-    stderr.writeln('Missing required fields. Provide --scholar, --type, --status.');
+    stderr.writeln(
+      'Missing required fields. Provide --scholar, --type, --status.',
+    );
     exit(2);
   }
 
-  final performedAt = _parseDate(cmd['performed-at'] as String?) ?? DateTime.now().toUtc();
+  final performedAt =
+      _parseDate(cmd['performed-at'] as String?) ?? DateTime.now().toUtc();
   final recordId = const Uuid().v4();
 
   await conn.execute(
@@ -134,9 +139,7 @@ Future<void> _handleAdd(Connection conn, ArgResults cmd) async {
 Future<void> _handleList(Connection conn, ArgResults cmd) async {
   final limit = int.tryParse(cmd['limit'] as String? ?? '20') ?? 20;
   final conditions = <String>[];
-  final params = <String, dynamic>{
-    'limit': limit,
-  };
+  final params = <String, dynamic>{'limit': limit};
 
   void addFilter(String column, String? value, String param) {
     if (value == null || value.isEmpty) return;
@@ -161,7 +164,9 @@ Future<void> _handleList(Connection conn, ArgResults cmd) async {
     params['until'] = until;
   }
 
-  final whereClause = conditions.isEmpty ? '' : 'WHERE ${conditions.join(' AND ')}';
+  final whereClause = conditions.isEmpty
+      ? ''
+      : 'WHERE ${conditions.join(' AND ')}';
   final result = await conn.execute(
     Sql.named('''
       SELECT
@@ -199,8 +204,11 @@ Future<void> _handleSummary(Connection conn, ArgResults cmd) async {
     params['type'] = type;
   }
 
-  final since = _parseDate(cmd['since'] as String?) ??
-      DateTime.now().toUtc().subtract(Duration(days: int.tryParse(cmd['window'] as String? ?? '30') ?? 30));
+  final since =
+      _parseDate(cmd['since'] as String?) ??
+      DateTime.now().toUtc().subtract(
+        Duration(days: int.tryParse(cmd['window'] as String? ?? '30') ?? 30),
+      );
   final until = _parseDate(cmd['until'] as String?);
 
   if (since != null) {
@@ -212,7 +220,9 @@ Future<void> _handleSummary(Connection conn, ArgResults cmd) async {
     params['until'] = until;
   }
 
-  final whereClause = conditions.isEmpty ? '' : 'WHERE ${conditions.join(' AND ')}';
+  final whereClause = conditions.isEmpty
+      ? ''
+      : 'WHERE ${conditions.join(' AND ')}';
 
   final statusRows = await conn.execute(
     Sql.named('''
@@ -253,7 +263,9 @@ DateTime? _parseDate(String? value) {
   try {
     return DateTime.parse(value).toUtc();
   } catch (_) {
-    stderr.writeln('Invalid date: $value (use ISO format YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ)');
+    stderr.writeln(
+      'Invalid date: $value (use ISO format YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ)',
+    );
     exit(2);
   }
 }
